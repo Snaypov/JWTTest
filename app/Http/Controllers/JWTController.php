@@ -36,7 +36,7 @@ class JWTController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
-            ]);
+        ]);
 
         return response()->json([
             'message' => 'User successfully registered',
@@ -57,16 +57,16 @@ class JWTController extends Controller
         ]);
 
         if ($validator->fails()) {
-            $res = response()->json($validator->errors(), 422);
-            $res->getData();
-            return view('jwt.login-jwt', compact('res'));
+            return response()->json($validator->errors(), 422);
+            // $res->getData();
         }
 
         if (!$token = auth()->attempt($validator->validated())) {
-            $res = response()->json(['error' => 'Unauthorized'], 401);
+            // $res = response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $res = $this->respondWithToken($token);
+        return $this->respondWithToken($token);
     }
 
     /**
